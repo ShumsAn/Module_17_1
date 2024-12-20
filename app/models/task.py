@@ -6,9 +6,10 @@ from app.models import *
 
 
 class Task(Base):
+
     __tablename__ = 'tasks'
-    id = Column(Integer, primary_key=True,index=True)
     __table_args__ = {'keep_existing': True}
+    id = Column(Integer, primary_key=True,index=True)
     title  = Column(String)
     content  = Column(String)
     priority  = Column(Integer, default=0) # Где default=0 - означает что по умолчанию  0
