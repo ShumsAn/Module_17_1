@@ -4,12 +4,11 @@ from sqlalchemy import Column,ForeignKey,Integer,String,Boolean
 from sqlalchemy.orm import relationship
 from app.models import *
 
-router = APIRouter(prefix="/task",tags=["/tasks"])
-
 
 class Task(Base):
     __tablename__ = 'tasks'
     id = Column(Integer, primary_key=True,index=True)
+    __table_args__ = {'keep_existing': True}
     title  = Column(String)
     content  = Column(String)
     priority  = Column(Integer, default=0) # Где default=0 - означает что по умолчанию  0
@@ -23,22 +22,3 @@ from sqlalchemy.schema import CreateTable
 print(CreateTable(Task.__table__))
 
 
-@router.get('/')
-async def all_tasks():
-    pass
-
-@router.get('/task_id')
-async def task_by_id():
-    pass
-
-@router.post('/create')
-async def create_task():
-    pass
-
-@router.put('/update')
-async def update_task():
-    pass
-
-@router.delete('/delete')
-async def delete_task():
-    pass
