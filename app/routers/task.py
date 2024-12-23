@@ -1,8 +1,20 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, status, HTTPException
+# Сессия БД
+from sqlalchemy.orm import Session
+# Функция подключения к БД
+from backend.db_depends import get_db
+# Аннотации, Модели БД и Pydantic.
+from typing import Annotated
+from models import User
+from schemas import CreateUser, UpdateUser
+# Функции работы с записями.
+from sqlalchemy import insert, select, update, delete
+# Функция создания slug-строки
+from slugify import slugify
 
 router = APIRouter(prefix="/task",tags=["/tasks"])
 @router.get('/')
-async def all_tasks():
+async def all_tasks(db: Annotated[Session, Depends(get_db)]):
     pass
 
 @router.get('/task_id')

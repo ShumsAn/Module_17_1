@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from app.backend.db import Base
+from backend.db import Base
 from sqlalchemy import Column,ForeignKey,Integer,String,Boolean
 from sqlalchemy.orm import relationship
-from app.models import *
+from models import *
 
 
 class User(Base):
@@ -18,7 +18,7 @@ class User(Base):
     tasks = relationship('Task', back_populates='user')
 
 
-from sqlalchemy.schema import CreateTable
-print(CreateTable(User.__table__))
+# from sqlalchemy.schema import CreateTable
+# print(CreateTable(User.__table__))
 
 
