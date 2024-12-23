@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, status, HTTPException
 # Сессия БД
 from sqlalchemy.orm import Session
 # Функция подключения к БД
-from backend.db_depends import get_db
+from app.backend.db_depends import get_db
 # Аннотации, Модели БД и Pydantic.
 from typing import Annotated
-from models import User
-from routers.schemas import CreateUser, UpdateUser
+from app.models import User
+from app.routers.schemas import CreateUser, UpdateUser
 # Функции работы с записями.
 from sqlalchemy import insert, select, update, delete
 # Функция создания slug-строки
@@ -25,7 +25,7 @@ async def all_users(db: Annotated[Session, Depends(get_db)]):
     return users
 
 @router.get('/user_id')
-async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: User):
+async def user_by_id(db: Annotated[Session, Depends(get_db)], user_id: int):
     user = db.scalars(select(User).where(User.id == user_id)).all()
     if user is None:
         return HTTPException(
@@ -47,7 +47,7 @@ async def create_user(db: Annotated[Session, Depends(get_db)], create_user: Crea
     }
 
 @router.put('/update')
-async def update_user(db: Annotated[Session, Depends(get_db)], user_id: User, update_user: UpdateUser):
+async def update_user(db: Annotated[Session, Depends(get_db)], user_id: int, update_user: UpdateUser):
     user = db.scalar(select(User).where(User.id == user_id))
     if user is None:
         raise HTTPException(
@@ -56,7 +56,6 @@ async def update_user(db: Annotated[Session, Depends(get_db)], user_id: User, up
         )
 
     db.execute(update(User).where(User.id == user_id).values(
-        username=update_user.username,
         firstname=update_user.firstname,
         lastname=update_user.lastname,
         age=update_user.age))
@@ -68,7 +67,7 @@ async def update_user(db: Annotated[Session, Depends(get_db)], user_id: User, up
     }
 
 @router.delete('/delete')
-async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: User):
+async def delete_user(db: Annotated[Session, Depends(get_db)], user_id: int):
     user = db.scalar(select(User).where(User.id == user_id))
     if user is None:
         raise HTTPException(
